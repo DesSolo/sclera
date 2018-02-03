@@ -1,0 +1,23 @@
+[Unit]
+Description=Sclera service
+After=nginx.service
+After=mongod.service
+
+[Service]
+Type=simple
+PIDFile=/etc/backend/service.pid
+WorkingDirectory=/etc/backend/sclera
+
+User=root
+Group=root
+
+Environment=RACK_ENV=production
+
+OOMScoreAdjust=-100
+
+ExecStart=/usr/bin/python3.6 /etc/backend/sclera/main.py
+ExecStop=/bin/kill -s HUP $MAINPID
+TimeoutSec=300
+
+[Install]
+WantedBy=multi-user.target
