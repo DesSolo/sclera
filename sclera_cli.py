@@ -53,7 +53,7 @@ class ScleraCLI(object):
             rez = user.change_user_password(login, pwd)
             print(rez)
         else:
-            print('Error add user')
+            print('Error reset password')
 
     def _check_password(self):
         password = self.inp('Password:')
@@ -76,7 +76,7 @@ class ScleraCLI(object):
             rez = user.add_new_user(login, pwd, 'admin')
             print(rez)
         else:
-            print('Error add user')
+            print('Error add admin')
 
 
 if __name__ == '__main__':
