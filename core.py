@@ -6,6 +6,8 @@ from re import match
 import configparser
 import logging
 from datetime import datetime
+from urllib.parse import quote
+import os
 
 to_sha = lambda x: sha256(x.encode('utf-8')).hexdigest()
 config = configparser.ConfigParser()
@@ -123,3 +125,19 @@ class UsersClass(DataBase):
         else:
             return []
 
+
+class PicturesClass(object):
+    def __init__(self):
+        self.path = config.get('Main', 'path_static_files')
+        self.url_static_files = config.get('Main', 'url_static_files')
+        self.col_files, self.files = self.fond_files()
+
+    def fond_files(self):
+        files = []
+        for file in os.listdir(self.path):
+            if os.path.isfile(os.path.join(self.path, file)):
+                files.append(self.url_static_files + quote(file))
+        return len(files), files
+
+    def get_files(self, start, end):
+        return self.files[start:end]
