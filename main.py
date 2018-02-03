@@ -55,7 +55,7 @@ class UsersHandler(BaseHendler):
                 if rez:
                     return self.r_serv(descriptin='Success add new user', status='OK')
                 else:
-                    return self.r_serv(descriptin='Error add new user', status='Error')
+                    return self.error('Error add new user')
             elif type == 'reset':
                 login = self.get_argument('login')
                 pwd = self.get_argument('pwd')
@@ -63,18 +63,18 @@ class UsersHandler(BaseHendler):
                 if rez:
                     return self.r_serv(descriptin='Success change password', status='OK')
                 else:
-                    return self.r_serv(descriptin='Error change password', status='Error')
+                    return self.error('Error change password')
             elif type == 'delete':
                 login = self.get_argument('login')
                 rez = Users.delete_user(login)
                 if rez:
                     return self.r_serv(descriptin='Success delete user', status='OK')
                 else:
-                    return self.r_serv(descriptin='Error delete user', status='Error')
+                    return self.error('Error delete user')
             else:
-                return self.r_serv(descriptin='Unknown type work', status='Error')
+                return self.error('Unknown type work')
         else:
-            return self.r_serv(descriptin='User has no privileges', status='Error')
+            return self.error('User has no privileges')
 
 
 class LoginHandler(BaseHendler):
@@ -84,14 +84,24 @@ class LoginHandler(BaseHendler):
             user = Users.show_single_user(self.get_argument('login'))
             return self.r_serv(token=token, status=user['status']['status_user'])
         else:
-            return self.r_serv(descriptin='Bad users', status='Error')
+            return self.error('Bad User')
 
+
+class PicturesHandler(BaseHendler):
+    def post(self, *args, **kwargs):
+        user = Users.show_single(self.get_argument('token'))
+        if user:
+            return self.r_serv(images=Pics.get_files(self.get_argument('start'),self.get_argument('stop')))
+        else:
+            return self.error('Bad user')
 
 application = web.Application([
     (r'/task/(.+)', TaskHandler),
     (r'/login', LoginHandler),
-    (r'/users/(.+)', UsersHandler)])
+    (r'/users/(.+)', UsersHandler),
+    (r'/images', PicturesHandler)])
 application.listen('5000', xheaders=True)
 Users = core.UsersClass()
 Task = core.TaskClass()
+Pics = core.PicturesClass()
 ioloop.IOLoop.instance().start()
