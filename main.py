@@ -47,8 +47,6 @@ class TaskHandler(BaseHendler):
 class UsersHandler(BaseHendler):
     def post(self, type, *args, **kwargs):
         status = Users.show_single(self.get_argument('token'))['status']['status_user']
-        def admin():
-            pass
         if status == 'admin':
             if type == 'add':
                 login = self.get_argument('login')
@@ -77,40 +75,6 @@ class UsersHandler(BaseHendler):
                 return self.r_serv(descriptin='Unknown type work', status='Error')
         else:
             return self.r_serv(descriptin='User has no privileges', status='Error')
-
-
-
-# class UsersHandler(BaseHendler):
-#     def post(self, type, *args, **kwargs):
-#         status = Users.show_single(self.get_argument('token'))['status']['status_user']
-#         if status == 'admin':
-#             if type == 'add':
-#                 login = self.get_argument('login')
-#                 pwd = self.get_argument('pwd')
-#                 rez = Users.add_new_user(login, pwd, 'user')
-#                 if rez:
-#                     return self.r_serv(descriptin='Success add new user', status='OK')
-#                 else:
-#                     return self.r_serv(descriptin='Error add new user', status='Error')
-#             elif type == 'reset':
-#                 login = self.get_argument('login')
-#                 pwd = self.get_argument('pwd')
-#                 rez = Users.change_user_password(login, pwd)
-#                 if rez:
-#                     return self.r_serv(descriptin='Success change password', status='OK')
-#                 else:
-#                     return self.r_serv(descriptin='Error change password', status='Error')
-#             elif type == 'delete':
-#                 login = self.get_argument('login')
-#                 rez = Users.delete_user(login)
-#                 if rez:
-#                     return self.r_serv(descriptin='Success delete user', status='OK')
-#                 else:
-#                     return self.r_serv(descriptin='Error delete user', status='Error')
-#             else:
-#                 return self.r_serv(descriptin='Unknown type work', status='Error')
-#         else:
-#             return self.r_serv(descriptin='User has no privileges', status='Error')
 
 
 class LoginHandler(BaseHendler):
