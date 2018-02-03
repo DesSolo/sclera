@@ -2,7 +2,7 @@ import os
 from subprocess import call, PIPE
 
 base_path = '/tmp'
-files = ['config.conf', 'core.py', 'main.py', 'sclera_cli.py']
+files = ['config.conf', 'core.py', 'main.py', 'sclera_cli.py', 'sclera.service']
 
 
 def create_folders():
@@ -19,6 +19,12 @@ def wget_files():
     [cmd(base_url + file) for file in files]
 
 
+def add_service():
+    os.rename(f'{base_path}/backend/sclera/sclera.service', '/etc/systemd/system/multi-user.target.wants/sclera.service')
+
+
 if __name__ == '__main__':
+    print('Only for root!')
     create_folders()
     wget_files()
+    add_service()
