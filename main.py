@@ -41,7 +41,7 @@ class TaskHandler(BaseHendler):
         if type == 'close':
             task_id = self.get_argument('task')
             Task.close(task_id)
-            return self.r_serv(status=True, description=f'{task_id} closed')
+            return self.r_serv(status=True, _id=task_id,  description='Task closed')
         if type == 'my':
             user = Users.show_single({'token': self.get_argument('token')})['login']
             return self.r_serv(status=True, tasks=Task.show_all({'user': user}, user=0))
