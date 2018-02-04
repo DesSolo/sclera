@@ -38,6 +38,10 @@ class TaskHandler(BaseHendler):
             image = self.get_argument('image')
             task_id = Task.add_task(user, date, description, image)
             return self.r_serv(status=True, task=task_id, user=user)
+        if type == 'close':
+            task_id = self.get_argument('task')
+            Task.close(task_id)
+            return self.r_serv(status=True, description=f'{task_id} closed')
         if type == 'my':
             user = Users.show_single({'token': self.get_argument('token')})['login']
             return self.r_serv(status=True, tasks=Task.show_all({'user': user}, user=0))

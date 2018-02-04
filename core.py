@@ -4,6 +4,7 @@ from hashlib import sha256
 from secrets import token_urlsafe
 from re import match
 import configparser
+from bson.objectid import ObjectId
 import logging
 from datetime import datetime
 from urllib.parse import quote
@@ -49,6 +50,9 @@ class TaskClass(DataBase):
 
     def show_all(self, params={}, **kwargs):
         return [_ for _ in self.col.find({**params}, {'tmp': 0, **kwargs}).limit(100)]
+
+    def close(self, _id):
+        return self.col.update_one({'_id': ObjectId(_id)}, {'$set': {'status': 'closed'}})
 
     def add_task(self, user, exp_date, description, image=''):
         """
