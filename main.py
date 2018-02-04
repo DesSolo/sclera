@@ -92,10 +92,15 @@ class LoginHandler(BaseHendler):
 
 
 class PicturesHandler(BaseHendler):
-    def post(self, *args, **kwargs):
+    def post(self, type, *args, **kwargs):
         user = Users.show_single(self.get_argument('token'))
         if user:
-            return self.r_serv(images=Pics.get_files(self.get_argument('start'), self.get_argument('stop')))
+            if type == 'info':
+                return self.r_serv(images=Pics.col_files, pages=Pics.col_pages)
+            elif type == 'get':
+                return self.r_serv(images=Pics.get_page(self.get_argument('page')))
+            else:
+                return self.error('Bad arguments')
         else:
             return self.error('Bad user')
 
@@ -103,7 +108,7 @@ application = web.Application([
     (r'/task/(.+)', TaskHandler),
     (r'/login', LoginHandler),
     (r'/users/(.+)', UsersHandler),
-    (r'/images', PicturesHandler)])
+    (r'/images/(.+)', PicturesHandler)])
 application.listen('5000', xheaders=True)
 Users = core.UsersClass()
 Task = core.TaskClass()
