@@ -134,14 +134,18 @@ class PicturesClass(object):
     def __init__(self):
         self.path = config.get('Main', 'path_static_files')
         self.url_static_files = config.get('Main', 'url_static_files')
-        self.col_files, self.files = self.fond_files()
+        self.col_files, self.col_pages, self.files = self.fond_files()
 
     def fond_files(self):
         files = []
         for file in os.listdir(self.path):
             if os.path.isfile(os.path.join(self.path, file)):
                 files.append(self.url_static_files + quote(file))
-        return len(files), files
+        pages = [[item for item in items] for items in zip(*[files] * 10)]
+        return len(files), len(pages), pages
 
-    def get_files(self, start, end):
-        return self.files[start:end]
+    def get_page(self, num):
+        if num <= self.col_pages:
+            return self.files[num]
+        else:
+            return []

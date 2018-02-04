@@ -95,7 +95,7 @@ class PicturesHandler(BaseHendler):
     def post(self, *args, **kwargs):
         user = Users.show_single(self.get_argument('token'))
         if user:
-            return self.r_serv(images=Pics.get_files(self.get_argument('start'),self.get_argument('stop')))
+            return self.r_serv(images=Pics.get_files(self.get_argument('start'), self.get_argument('stop')))
         else:
             return self.error('Bad user')
 
