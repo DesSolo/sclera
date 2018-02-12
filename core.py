@@ -6,7 +6,7 @@ from re import match
 import configparser
 from bson.objectid import ObjectId
 import logging
-from datetime import datetime
+import datetime
 from urllib.parse import quote
 import os
 
@@ -18,6 +18,10 @@ logging.basicConfig(filename=config.get('Logs', 'log_file'),
                     format='%(asctime)s,%(levelname)s,%(message)s',
                     datefmt='%d-%m-%y %H:%M')
 
+def week():
+    today = datetime.date.today()
+    monday = today - datetime.timedelta(days=today.weekday())
+    return [date.strftime('%Y-%m-%d') for date in [monday + datetime.timedelta(days=day) for day in range(7)]]
 
 class Config(object):
     def __init__(self):
@@ -65,8 +69,8 @@ class TaskClass(DataBase):
         }
         :return:
         """
-        return self.col.insert_one({"user": user, "cr_date": datetime.now(), "exp_date": exp_date, "status": 'new',
-                                    'image': image, 'description': description}).inserted_id
+        return self.col.insert_one({"user": user, "cr_date": datetime.datetime.now(), "exp_date": exp_date,
+                                    "status": 'new', 'image': image, 'description': description}).inserted_id
 
 
 class UsersClass(DataBase):
