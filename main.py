@@ -55,6 +55,8 @@ class UsersHandler(BaseHendler):
     def post(self, type, *args, **kwargs):
         status = Users.show_single(self.get_argument('token'))['status']['status_user']
         if status == 'admin':
+            if type == 'show':
+                return self.r_serv(users=Users.show_all())
             if type == 'add':
                 login = self.get_argument('login')
                 pwd = self.get_argument('pwd')
