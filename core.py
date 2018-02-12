@@ -145,6 +145,7 @@ class PicturesClass(object):
         self.path = config.get('Main', 'path_static_files')
         self.url_static_files = config.get('Main', 'url_static_files')
         self.col_files, self.col_pages, self.files = self.fond_files()
+        logging.critical(self.col_pages, self.col_files)
 
     def fond_files(self):
         files = []
@@ -155,6 +156,7 @@ class PicturesClass(object):
         return len(files), len(pages), pages
 
     def get_page(self, num):
+        num = int(num)
         if num <= self.col_pages:
             return self.files[num]
         else:

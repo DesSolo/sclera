@@ -96,7 +96,7 @@ class LoginHandler(BaseHendler):
 
 class PicturesHandler(BaseHendler):
     def post(self, type, *args, **kwargs):
-        user = Users.show_single(self.get_argument('token'))
+        user = Users.show_single({'token':  self.get_argument('token')}, login=1)
         if user:
             if type == 'info':
                 return self.r_serv(images=Pics.col_files, pages=Pics.col_pages)
