@@ -55,6 +55,12 @@ class TaskClass(DataBase):
     def show_all(self, params={}, **kwargs):
         return [_ for _ in self.col.find({**params}, {'tmp': 0, **kwargs}).limit(100)]
 
+    def show_week(self, login):
+        td = datetime.datetime.now()
+        start = td - datetime.timedelta(days=td.weekday())
+        end = start + datetime.timedelta(days=6)
+        return self.show_all({'login': login, 'cr_date': {'$lte': start, '$gte': end}}, user=0)
+
     def close(self, _id):
         return self.col.update_one({'_id': ObjectId(_id)}, {'$set': {'status': 'closed'}})
 

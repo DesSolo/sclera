@@ -47,7 +47,7 @@ class TaskHandler(BaseHendler):
             return self.r_serv(status=True, tasks=Task.show_all({'user': user}, user=0))
         elif type == 'week':
             user = Users.show_single({'token': self.get_argument('token')})['login']
-            return self.r_serv(status=True, tasks=Task.show_all({'user': user}, user=0))
+            return self.r_serv(status=True, tasks=Task.show_week(user))
         else:
             return self.error('Bad arguments')
 
