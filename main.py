@@ -28,11 +28,12 @@ class BaseHendler(web.RequestHandler):
 
 class TaskHandler(BaseHendler):
     def post(self, type, *args, **kwargs):
+        status = Users.show_single({'token': self.get_argument('token')}, status=1)['status']['status_user']
         if type == 'add':
-            if self.status == 'admin':
+            if status == 'admin':
                 user = self.get_argument('login')
             else:
-                user = Users.show_single({'token': self.get_argument('token')})['login']
+                user = Users.show_single({'token': self.get_argument('token')}, login=1)['login']
             date = self.get_argument('date')
             description = self.get_argument('description')
             image = self.get_argument('image')
