@@ -152,7 +152,7 @@ class PicturesClass(object):
         for file in os.listdir(self.path):
             if os.path.isfile(os.path.join(self.path, file)):
                 files.append(self.url_static_files + quote(file))
-        pages = [[item for item in items] for items in zip(*[iter(files)] * 10)]
+        pages = [[item for item in items] for items in zip(*[iter(files)] * 12)]
         return len(files), len(pages), pages
 
     def get_page(self, num):

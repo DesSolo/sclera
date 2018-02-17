@@ -44,7 +44,10 @@ class TaskHandler(BaseHendler):
             Task.close(task_id)
             return self.r_serv(status=True, _id=task_id,  description='Task closed')
         elif type == 'my':
-            user = Users.show_single({'token':  self.get_argument('token')}, login=1)['login']
+            if status == 'admin':
+                user = self.get_argument('login')
+            else:
+                user = Users.show_single({'token': self.get_argument('token')}, login=1)['login']
             return self.r_serv(status=True, tasks=Task.show_all({'user': user}, user=0))
         elif type == 'week':
             user = Users.show_single({'token': self.get_argument('token')})['login']
@@ -60,7 +63,7 @@ class UsersHandler(BaseHendler):
                 return self.r_serv(users=Users.show_all({}, login=1, status=1))
             if type == 'add':
                 login = self.get_argument('login')
-                pwd = self.get_argument('pwd')
+                pwd = self.get_argument('password')
                 rez = Users.add_new_user(login, pwd, 'user')
                 if rez:
                     return self.r_serv(descriptin='Success add new user', status='OK')
@@ -68,19 +71,15 @@ class UsersHandler(BaseHendler):
                     return self.error('Error add new user')
             elif type == 'reset':
                 login = self.get_argument('login')
-                pwd = self.get_argument('pwd')
+                pwd = self.get_argument('password')
                 rez = Users.change_user_password(login, pwd)
                 if rez:
                     return self.r_serv(descriptin='Success change password', status='OK')
                 else:
                     return self.error('Error change password')
             elif type == 'delete':
-                login = self.get_argument('login')
-                rez = Users.delete_user(login)
-                if rez:
-                    return self.r_serv(descriptin='Success delete user', status='OK')
-                else:
-                    return self.error('Error delete user')
+                Users.delete_user(self.get_argument('login'))
+                return self.r_serv(descriptin='Success delete user', status='OK')
             else:
                 return self.error('Unknown type work')
         else:
