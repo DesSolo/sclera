@@ -45,9 +45,9 @@ class TaskHandler(BaseHendler):
             return self.r_serv(status=True, _id=task_id,  description='Task closed')
         elif type == 'my':
             if status == 'admin':
-                user = self.get_argument('login')
-            else:
-                user = Users.show_single({'token': self.get_argument('token')}, login=1)['login']
+                user = self.get_argument('login', None)
+                if not user:
+                    user = Users.show_single({'token': self.get_argument('token')}, login=1)['login']
             return self.r_serv(status=True, tasks=Task.show_all({'user': user}, user=0))
         elif type == 'week':
             user = Users.show_single({'token': self.get_argument('token')})['login']
