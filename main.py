@@ -103,7 +103,7 @@ class PicturesHandler(BaseHendler):
             if type == 'info':
                 return self.r_serv(images=Pics.col_files, pages=Pics.col_pages)
             elif type == 'get':
-                return self.r_serv(images=Pics.get_page(self.get_argument('page')))
+                return self.r_serv(images=Pics.get_page(self.get_argument('page', 1)))
             else:
                 return self.error('Bad arguments')
         else:
