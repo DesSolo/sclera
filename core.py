@@ -164,4 +164,3 @@ class PicturesClass(object):
 
 a=PicturesClass()
 b = a.get_page(2)
-print(b)
