@@ -48,7 +48,10 @@ class TaskHandler(BaseHendler):
                 user = self.get_argument('login', None)
                 if not user:
                     user = Users.show_single({'token': self.get_argument('token')}, login=1)['login']
-            return self.r_serv(status=True, tasks=Task.show_all({'user': user}, user=0))
+                return self.r_serv(status=True, tasks=Task.show_all({'user': user}, user=0))
+            else:
+                user = Users.show_single({'token': self.get_argument('token')}, login=1)['login']
+                return self.r_serv(status=True, tasks=Task.show_all({'user': user}, user=0))
         elif type == 'week':
             user = Users.show_single({'token': self.get_argument('token')})['login']
             return self.r_serv(status=True, tasks=Task.show_week(user))
@@ -64,7 +67,7 @@ class UsersHandler(BaseHendler):
             if type == 'add':
                 login = self.get_argument('login')
                 pwd = self.get_argument('password')
-                rez = Users.add_new_user(login, pwd, 'user')
+                rez = Users.add_new_user(login, pwd, self.get_argument('status', 'user'))
                 if rez:
                     return self.r_serv(descriptin='Success add new user', status='OK')
                 else:
